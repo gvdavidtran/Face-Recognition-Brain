@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js';
+import Clarifai from 'clarifai';
 import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
+import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import './App.css';
 
 const particlesOptions = {
@@ -17,6 +19,10 @@ const particlesOptions = {
     },
   }
 }
+
+const app = new Clarifai.App({
+       apiKey: '0e83ae675ad849b7abaa27a4005477f5'
+      });
 
 class App extends Component {
   constructor(){
@@ -32,6 +38,14 @@ class App extends Component {
 
   onButtonSubmit = () => {
     console.log('click');
+    app.models.predict(Clarifai.GENERAL_MODEL, 'https://samples.clarifai.com/metro-north.jpg').then(
+      function(response) {
+        console.log(response);
+      },
+      function(err) {
+        console.error(err);
+      }
+    );
   }
 
 
@@ -48,6 +62,7 @@ class App extends Component {
         <ImageLinkForm 
           onInputChange={this.onInputChange} 
           onButtonSubmit={this.onButtonSubmit} />
+        <FaceRecognition />
       </div>
     );
   }
